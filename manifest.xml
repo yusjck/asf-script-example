@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Script name="基础功能测试" description="测试脚本引擎的基本功能是否正常，包括图像捕获、图色识别、屏幕触控、全局提示等。" main="main.lua" guid="CD4A3E42-B05A-42E5-9A72-8B3A41DFE06A" version="1.0.0" />

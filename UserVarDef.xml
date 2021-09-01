@@ -1,0 +1,23 @@
+<UserVars>
+	<VarGroup text="测试选项">
+		<UserVar type="DropList" name="run_mode" text="运行模式" description="" default="0">
+			<Option text="功能测试" value="0" />
+			<Option text="日志输出测试" value="1" />
+		</UserVar>
+		<UserVar type="DropList" name="touch_mode" text="触控模式" description="" default="0">
+			<Option text="自动" value="0" />
+			<Option text="无障碍手势模拟" value="1" />
+			<Option text="ROOT权限模拟" value="2" />
+		</UserVar>
+		<UserVar type="Switch" name="auto_unlock_screen" text="自动解锁屏幕" description="自动点亮屏幕，上划解锁并输入PIN码" default="0" />
+		<UserVar type="Edit" name="device_pin_code" text="锁屏PIN码" description="指定用于解锁屏幕的PIN码" default="0000" />
+	</VarGroup>
+	<VarGroup text="测试内容">
+		<UserVar type="Switch" name="全局弹窗" text="全局弹窗" description="测试能否显示全局对话框" default="1" />
+		<UserVar type="Switch" name="触控模拟" text="触控模拟" description="测试能否模拟进行触摸操作和按键操作" default="1" />
+		<UserVar type="Switch" name="屏幕捕获" text="屏幕捕获" description="测试能否截取屏幕图像" default="1" />
+		<UserVar type="Switch" name="图色识别" text="图色识别" description="识别桌面上的QQ图标并点击开启" default="0" />
+		<UserVar type="Switch" name="内存测试" text="内存测试" description="注入指定App进程读取其内存并执行代码" default="0" />
+		<UserVar type="Edit" name="注入目标" text="注入目标" description="指定用于内存测试的目标App" default="com.example.wificar" />
+	</VarGroup>
+</UserVars>
