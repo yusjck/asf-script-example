@@ -25,16 +25,16 @@ end
 
 function Device:isInWelcomeView()
 	if self.brand == "xiaomi" then
-		return View:findById("com.android.systemui:id/keyguard_indication_text")
+		return View:findByRule({id="com.android.systemui:id/keyguard_indication_text"})
 	elseif self.brand == "oppo" then
-		return View:findById("com.android.systemui:id/keyguard_slider_layout")
+		return View:findByRule({id="com.android.systemui:id/keyguard_slider_layout"})
 	else
-		return View:findById("com.android.systemui:id/keyguard_carrier_text")
+		return View:findByRule({id="com.android.systemui:id/keyguard_carrier_text"})
 	end
 end
 
 function Device:isInKeyguardView()
-	return View:findById("com.android.systemui:id/keyguard_host_view")
+	return View:findByRule({id="com.android.systemui:id/keyguard_host_view"})
 end
 
 function Device:unlock1()
@@ -44,8 +44,8 @@ function Device:unlock1()
 			repeat
 				Touch:pullDown()
 				delay(1000)
-			until View:findById("com.android.systemui:id/notification_container_parent")
-			View:clickById("com.android.systemui:id/big_time")
+			until View:findByRule({id="com.android.systemui:id/notification_container_parent"})
+			View:clickByRule({id="com.android.systemui:id/big_time"})
 			delay(1000)
 		until not Device:isInWelcomeView()
 	else
@@ -78,9 +78,9 @@ end
 
 function Device:inputPin(pin)
 	local function getKeyBtn(key)
-		local keyBtn = View:findById("com.android.systemui:id/key"..key)
+		local keyBtn = View:findByRule({id="com.android.systemui:id/key"..key})
 		if not keyBtn then
-			keyBtn = View:findByText(key)
+			keyBtn = View:findByRule({text=key})
 		end
 		if not keyBtn then
 			return nil
@@ -114,7 +114,7 @@ function Device:inputPin(pin)
 			end
 		end
 	end
-	View:clickById("com.android.systemui:id/key_enter")
+	View:clickByRule({id="com.android.systemui:id/key_enter"})
 end
 
 function Device:wakeAndUnlock()

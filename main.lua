@@ -5,7 +5,7 @@ script.LoadScript("osapi")
 script.LoadScript("device")
 script.LoadScript("utils")
 
-function 全局弹窗测试()
+function test_popupBox()
 	logPrint("开始全局弹窗测试")
 	local startTime = getTickCount()
 	msgBoxTimeout(3000, "全局弹窗测试")
@@ -17,7 +17,7 @@ function 全局弹窗测试()
 	logPrint("全局弹窗测试完成")
 end
 
-function 触控测试()
+function test_touch()
 	logPrint("开始触控测试")
 	showMessage("按下HOME键")
 	delay(500)
@@ -45,7 +45,7 @@ function 触控测试()
 	logPrint("触控测试完成")
 end
 
-function 屏幕捕获测试()
+function test_capture()
 	logPrint("开始屏幕捕获测试")
 	showMessage("截屏")
 	local savePath = getScriptDir().."/test.png"
@@ -63,7 +63,7 @@ function 屏幕捕获测试()
 	logPrint("屏幕捕获测试完成")
 end
 
-function 搜索QQ图标()
+function test_findPicture()
 	logPrint("开始搜索桌面QQ图标")
 	home()
 	delay(1000)
@@ -83,7 +83,7 @@ function 搜索QQ图标()
 	logPrint("搜索桌面QQ图标完成")
 end
 
-function 内存访问测试()
+function test_readMemory()
 	local targetAppName = getUserVar("注入目标")
 	local pid = misc.GetProcessId(targetAppName)
 	if not pid then
@@ -105,25 +105,7 @@ function 内存访问测试()
 	msgBox("调用注入代码完成，命令返回：%s", res)
 end
 
-function basicCmdTest()
-	if getUserVar("全局弹窗") == "1" then
-		全局弹窗测试()
-	end
-	if getUserVar("触控模拟") == "1" then
-		触控测试()
-	end
-	if getUserVar("屏幕捕获") == "1" then
-		屏幕捕获测试()
-	end
-	if getUserVar("图色识别") == "1" then
-		搜索QQ图标()
-	end
-	if getUserVar("内存测试") == "1" then
-		内存访问测试()
-	end
-end
-
-function repeatPrintLog()
+function test_outputLog()
 	logPrint("开始循环日志打印")
 	for i = 1, 100 do
 		logPrint("log output%d", i)
@@ -171,14 +153,27 @@ function main()
 		Touch:setMode(2)
 	end
 
+	local delayRun = tonumber(getUserVar("delay_run", "0"))
+	if delayRun > 0 then
+		logPrint("执行%d秒延迟", delayRun)
+		delay(delayRun * 1000)
+	end
+
 	Device:init()
 	Device:wakeAndUnlock()
 
-	local runMode = getUserVar("run_mode")
-	if runMode == "0" then
-		basicCmdTest()
-	elseif runMode == "1" then
-		repeatPrintLog()
+	local tasks = {
+		{name="全局弹窗", func=test_popupBox},
+		{name="触控模拟", func=test_touch},
+		{name="屏幕捕获", func=test_capture},
+		{name="图色识别", func=test_findPicture},
+		{name="内存测试", func=test_readMemory},
+		{name="日志输出测试", func=test_outputLog},
+	}
+	for _, task in ipairs(tasks) do
+		if getUserVar(task.name) == "1" then
+			task.func()
+		end
 	end
 	logPrint("全部测试完成")
 end

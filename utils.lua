@@ -176,6 +176,10 @@ function View:longClick()
 	longClickView(node.handle)
 end
 
+function View:tap()
+	Touch:tap(self.x, self.y)
+end
+
 -- 返回view的根节点
 function View:getRootNode()
 	local function convertToObject(node, parent)
@@ -217,60 +221,50 @@ function View:find(isFoundFunc)
 	end
 end
 
-function View:findById(id, clickable)
+function View:findByRule(rule)
 	return self:find(function(node)
-		if clickable and node.clickable ~= clickable then
+		if rule.clickable and node.clickable ~= rule.clickable then
 			return false
 		end
-		return node.id == id
-	end)
-end
-
-function View:findByText(text, clickable)
-	return self:find(function(node)
-		if clickable and node.clickable ~= clickable then
-			return false
-		end
-		return node.text == text
-	end)
-end
-
-function View:clickById(id, clickable)
-	local node = self:findById(id, clickable)
-	if node then
-		node:click()
-		return true
-	end
-	return false
-end
-
-function View:clickByText(text, clickable)
-	local node = self:findByText(text, clickable)
-	if node then
-		node:click()
-		return true
-	end
-	return false
-end
-
-function View:findByRules(rules, clickable)
-	rules = split(rules, "|")
-	return self:find(function(node)
-		if clickable and node.clickable ~= clickable then
-			return false
-		end
-		if node.id and table.contains(rules, node.id) then
+		if rule.id and node.id == rule.id then
 			return true
 		end
-		if node.text and table.contains(rules, node.text) then
+		if rule.text and node.text == rule.text then
 			return true
+		end
+		if node.text and rule.textRules then
+			local textRules = split(rule.textRules, "|")
+			for _, v in ipairs(textRules) do
+				if string.find(node.text, v) then
+					return true
+				end
+			end
 		end
 		return false
 	end)
 end
 
-function View:clickByRules(rules, clickable)
-	local node = self:findByRules(rules, clickable)
+function View:findByPos(x, y, clickable)
+	local rootNode = self.handle and self or self:getRootNode()
+	if rootNode then
+		local foundNode, lastNodeDistance
+		self:enumNodeTree(rootNode, function(node)
+			if clickable and node.clickable ~= clickable then
+				return false
+			end
+			local dist = math.sqrt(math.pow(node.x - x, 2) + math.pow(node.y - y, 2))
+			if not lastNodeDistance or dist < lastNodeDistance then
+				foundNode = node
+				lastNodeDistance = dist
+			end
+			return false
+		end)
+		return foundNode
+	end
+end
+
+function View:clickByRule(rule)
+	local node = self:findByRule(rule)
 	if node then
 		node:click()
 		return true
@@ -278,24 +272,24 @@ function View:clickByRules(rules, clickable)
 	return false
 end
 
-function View:open(button, view, timeout)
-	if self:findByRules(view) then
+function View:open(rule_button, rule_newView, timeout)
+	if self:findByRule(rule_newView) then
 		return true
 	end
-	if not self:clickByRules(button) then
+	if not self:clickByRule(rule_button) then
 		return false
 	end
-	return self:waitFor(view, timeout)
+	return self:waitFor(rule_newView, timeout)
 end
 
-function View:waitFor(view, timeout)
+function View:waitFor(rule_newView, timeout)
 	local timeEnd = getTickCount() + (timeout and timeout or 5000)
 	repeat
 		delay(500)
 		if getTickCount() >= timeEnd then
 			return false
 		end
-	until self:findByRules(view)
+	until self:findByRule(rule_newView)
 	return true
 end
 
@@ -316,7 +310,7 @@ function Touch:init()
 end
 
 function Touch:setMode(mode)
-	assert(mode ~= 1 and mode ~= 1, "invalid touch mode")
+	assert(mode ~= 1 and mode ~= 2, "invalid touch mode")
 	self.mode = mode
 end
 
