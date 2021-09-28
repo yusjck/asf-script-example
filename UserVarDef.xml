@@ -13,7 +13,7 @@
 		<UserVar type="Switch" name="全局弹窗" text="全局弹窗" description="测试能否显示全局对话框" default="1" />
 		<UserVar type="Switch" name="触控模拟" text="触控模拟" description="测试能否模拟进行触摸操作和按键操作" default="1" />
 		<UserVar type="Switch" name="屏幕捕获" text="屏幕捕获" description="测试能否截取屏幕图像" default="1" />
-		<UserVar type="Switch" name="图色识别" text="图色识别" description="识别桌面上的QQ图标并点击开启" default="0" />
+		<UserVar type="Switch" name="图色识别" text="图色识别" description="搜索桌面上的Google Play图标并点击开启" default="0" />
 		<UserVar type="Switch" name="内存测试" text="内存测试" description="注入指定App进程读取其内存并执行代码" default="0" />
 		<UserVar type="Edit" name="注入目标" text="注入目标" description="指定用于内存测试的目标App" default="com.example.wificar" />
 		<UserVar type="Switch" name="日志输出测试" text="日志输出测试" description="循环输出脚本日志" default="0" />

@@ -90,7 +90,7 @@ function touchTap(x, y)
 	return input.Tap(x, y)
 end
 
--- 模拟手指在触摸屏上滑动
+-- 模拟手指在触摸屏上划动
 function touchSwipe(x1, y1, x2, y2, duration)
 	return input.Swipe(x1, y1, x2, y2, duration)
 end

@@ -150,7 +150,7 @@ end
 
 -- 启动APP
 function startApp(pkgName, clsName)
-	local args = {pkgName, clsName}
+	local args = {pkgName, clsName and clsName or ""}
 	local res = sendDeviceCmd("system.startApp", cjson.encode(args))
 	return cjson.decode(res)["result"]
 end
@@ -246,10 +246,10 @@ end
 
 -- 模拟坐标点击
 function tap(x, y)
-	gesture({{x, y}}, 50)
+	gesture({{x, y}}, 20)
 end
 
--- 模拟滑动
+-- 模拟划动
 function swipe(x1, y1, x2, y2, duration)
 	gesture({{x1, y1}, {x2, y2}}, duration)
 end
@@ -264,12 +264,12 @@ function home()
 	sendDeviceCmd("accessibility.home", "[]")
 end
 
--- 模拟下滑操作
+-- 模拟下划操作
 function scrollBackward()
 	sendDeviceCmd("accessibility.scrollBackward", "[]")
 end
 
--- 模拟上滑操作
+-- 模拟上划操作
 function scrollForward()
 	sendDeviceCmd("accessibility.scrollForward", "[]")
 end

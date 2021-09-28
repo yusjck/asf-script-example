@@ -24,12 +24,12 @@ function test_touch()
 	home()
 	delay(2000)
 
-	showMessage("左滑")
+	showMessage("左划")
 	delay(500)
 	Touch:swipeLeft()
 	delay(2000)
 
-	showMessage("右滑")
+	showMessage("右划")
 	delay(500)
 	Touch:swipeRight()
 	delay(1000)
@@ -40,6 +40,7 @@ function test_touch()
 	delay(1000)
 	
 	showMessage("返回")
+	delay(500)
 	back()
 	delay(1000)
 	logPrint("触控测试完成")
@@ -64,23 +65,24 @@ function test_capture()
 end
 
 function test_findPicture()
-	logPrint("开始搜索桌面QQ图标")
+	logPrint("开始搜索桌面Google Play图标")
 	home()
 	delay(1000)
 	home()
 	delay(1000)
-	for i = 0, 5 do
-		local appIcon = Display:findPicture(getScriptDir().."/pic/qq.png", "C0C0C0", 1)
+	for i = 1, 3 do
+		local appIcon = Display:findPicture(getScriptDir().."/pic/play.png", "C0C0C0", 0.85)
 		if appIcon then
-			logPrint("点击QQ图标")
-			showMessage("点击QQ图标，坐标：%d,%d", appIcon.x, appIcon.y)
+			showMessage("点击Play图标，坐标：%d,%d", appIcon.x, appIcon.y)
+			delay(1000)
+			logPrint("点击Play图标")
 			appIcon:tap()
 			break
 		end
 		Touch:swipeLeft()
 		delay(1000)
 	end
-	logPrint("搜索桌面QQ图标完成")
+	logPrint("搜索桌面图标完成")
 end
 
 function test_readMemory()

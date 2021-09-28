@@ -263,34 +263,29 @@ function View:findByPos(x, y, clickable)
 	end
 end
 
-function View:clickByRule(rule)
-	local node = self:findByRule(rule)
-	if node then
-		node:click()
-		return true
+function view(rule)
+	local finder = {}
+	finder.findOne = function(self, timeout)
+		local v
+		repeat
+			v = View:findByRule(self.rule)
+			if v then break end
+			if not timeout or timeout == 0 then break end
+			local delayTime = timeout > 500 and 500 or timeout
+			delay(delayTime)
+			timeout = timeout - delayTime
+		until false
+		return v
 	end
-	return false
-end
-
-function View:open(rule_button, rule_newView, timeout)
-	if self:findByRule(rule_newView) then
-		return true
-	end
-	if not self:clickByRule(rule_button) then
-		return false
-	end
-	return self:waitFor(rule_newView, timeout)
-end
-
-function View:waitFor(rule_newView, timeout)
-	local timeEnd = getTickCount() + (timeout and timeout or 5000)
-	repeat
-		delay(500)
-		if getTickCount() >= timeEnd then
-			return false
+	finder.getOne = function(self, timeout)
+		local v = self:findOne(timeout)
+		if not v then
+			throw("view not found")
 		end
-	until self:findByRule(rule_newView)
-	return true
+		return v
+	end
+	finder.rule = rule
+	return finder
 end
 
 Touch = {}
@@ -356,10 +351,10 @@ function Touch:swipeDown()
 end
 
 function Touch:swipeLeft()
-	self:swipe(0.2, 0.7, 0.8, 0.7, 300)
+	self:swipe(0.85, 0.7, 0.15, 0.7, 200)
 end
 
 function Touch:swipeRight()
-	self:swipe(0.8, 0.7, 0.2, 0.7, 300)
+	self:swipe(0.15, 0.7, 0.85, 0.7, 200)
 end
 

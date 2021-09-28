@@ -25,31 +25,37 @@ end
 
 function Device:isInWelcomeView()
 	if self.brand == "xiaomi" then
-		return View:findByRule({id="com.android.systemui:id/keyguard_indication_text"})
+		return view{id="com.android.systemui:id/keyguard_indication_text"}:findOne()
 	elseif self.brand == "oppo" then
-		return View:findByRule({id="com.android.systemui:id/keyguard_slider_layout"})
-	else
-		return View:findByRule({id="com.android.systemui:id/keyguard_carrier_text"})
+		return view{id="com.android.systemui:id/keyguard_slider_layout"}:findOne()
+	else	-- 安卓原生锁屏界面
+		return view{id="com.android.systemui:id/keyguard_carrier_text"}:findOne()
 	end
 end
 
 function Device:isInKeyguardView()
-	return View:findByRule({id="com.android.systemui:id/keyguard_host_view"})
+	return view{id="com.android.systemui:id/keyguard_host_view"}:findOne()
 end
 
 function Device:unlock1()
 	if self.brand == "xiaomi" then
+		-- MIUI模拟上划无法进入解锁界面，需特殊处理
 		logPrint("MIUI解锁")
 		repeat
+			-- 下拉打开通知栏
 			repeat
 				Touch:pullDown()
 				delay(1000)
-			until View:findByRule({id="com.android.systemui:id/notification_container_parent"})
-			View:clickByRule({id="com.android.systemui:id/big_time"})
-			delay(1000)
+			until view{id="com.android.systemui:id/notification_container_parent"}:findOne()
+			-- 点击通知栏上的时间，成功后会进入解锁界面
+			local btn = view{id="com.android.systemui:id/big_time"}:findOne()
+			if btn then
+				btn:click()
+				delay(1000)
+			end
 		until not Device:isInWelcomeView()
 	else
-		logPrint("模拟上滑解锁")
+		logPrint("模拟上划解锁")
 		repeat
 			Touch:swipe(0.5, 0.7, 0.5, 0.1, 500)
 			delay(1000)
@@ -66,6 +72,7 @@ function Device:unlock2()
 				showMessage("未开启自动解锁，脚本退出")
 				endScript("failure")
 			end
+			-- 输入PIN码解锁屏幕
 			repeat
 				self:inputPin(self.pinCode)
 				delay(1000)
@@ -78,9 +85,9 @@ end
 
 function Device:inputPin(pin)
 	local function getKeyBtn(key)
-		local keyBtn = View:findByRule({id="com.android.systemui:id/key"..key})
+		local keyBtn = view{id="com.android.systemui:id/key"..key}:findOne()
 		if not keyBtn then
-			keyBtn = View:findByRule({text=key})
+			keyBtn = view{text=key}:findOne()
 		end
 		if not keyBtn then
 			return nil
@@ -88,6 +95,7 @@ function Device:inputPin(pin)
 		return Display.Point:new(keyBtn.x, keyBtn.y)
 	end
 	local function getKey0Btn()
+		-- OPPO系统上找不到键0，只能通过其它按键计算出键0的位置
 		local key5Btn = getKeyBtn("5")
 		local key8Btn = getKeyBtn("8")
 		if not key5Btn or not key8Btn then
@@ -114,7 +122,9 @@ function Device:inputPin(pin)
 			end
 		end
 	end
-	View:clickByRule({id="com.android.systemui:id/key_enter"})
+	-- 安卓原生按回车后解锁，其它系统没这个键，输完PIN直接解锁
+	local keyEnter = view{id="com.android.systemui:id/key_enter"}:findOne()
+	if keyEnter then keyEnter:click() end
 end
 
 function Device:wakeAndUnlock()
