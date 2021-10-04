@@ -4,7 +4,7 @@ if exist res rd /q /s res
 md res
 if not exist release md release
 
-set scriptdir=.\
+set scriptdir=.
 set outputpath=release\latest.spk
 
 echo 拷贝脚本文件
@@ -22,7 +22,9 @@ call :make %scriptdir%\UserVarDef.xml res
 call :make %scriptdir%\manifest.xml res
 
 echo 写入编译时间
-for /f "tokens=1 delims= " %%i in ("%date%") do set /p=%%i<nul>res\buildinfo.txt
+for /f %%x in ('wmic os get localdatetime ^| find "."') do set dts=%%x
+set dt=%dts:~0,4%-%dts:~4,2%-%dts:~6,2% %dts:~8,2%:%dts:~10,2%:%dts:~12,2%
+echo %dt%>res\buildinfo.txt
 
 echo 生成资源文件
 start /B /WAIT WinRAR a -m5 -r0 -ep1 res.zip res\*

@@ -7,7 +7,7 @@
 		</UserVar>
 		<UserVar type="Edit" name="delay_run" text="延迟执行" description="启动后等待多少秒执行，用于测试屏幕解锁功能" default="0" />
 		<UserVar type="Switch" name="auto_unlock_screen" text="自动解锁屏幕" description="自动点亮屏幕，上划解锁并输入PIN码" default="0" />
-		<UserVar type="Edit" name="device_pin_code" text="锁屏PIN码" description="指定用于解锁屏幕的PIN码" default="0000" />
+		<UserVar type="Edit" name="device_pin_code" text="锁屏PIN码" description="指定用于解锁屏幕的PIN码" default="0000" mask="true" />
 	</VarGroup>
 	<VarGroup text="测试内容">
 		<UserVar type="Switch" name="全局弹窗" text="全局弹窗" description="测试能否显示全局对话框" default="1" />
