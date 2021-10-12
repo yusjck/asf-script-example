@@ -116,13 +116,13 @@ end
 -- 分割字符串
 function split(str, delim)
 	local start = 1
-	local spt = {} 
+	local spt = {}
 	repeat
 		local s, e = string.find(str, delim, start, true)
-		if s then 
+		if s then
 			table.insert(spt, string.sub(str, start, s - 1))
 			start = e + 1
-		end 
+		end
 	until not s
 	table.insert(spt, string.sub(str, start))	-- insert final one (after last delimiter)
 	return spt
@@ -134,8 +134,8 @@ function trim(str)
 end
 
 function isAssignmentExpression( str )
-	local i = 1;
-	local curChar;
+	local i = 1
+	local curChar
 	local quotesType = "none" -- none, single or double
 	local isEscaping = false
 	curChar = string.sub( str, 1, 1 )
@@ -176,7 +176,6 @@ function isAssignmentExpression( str )
 		i = i + 1
 		curChar = string.sub( str, i, i )
 	end
- 
 	return false
 end
 

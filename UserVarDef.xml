@@ -10,7 +10,7 @@
 		<UserVar type="Edit" name="device_pin_code" text="锁屏PIN码" description="指定用于解锁屏幕的PIN码" default="0000" mask="true" />
 	</VarGroup>
 	<VarGroup text="测试内容">
-		<UserVar type="Switch" name="全局弹窗" text="全局弹窗" description="测试能否显示全局对话框" default="1" />
+		<UserVar type="Switch" name="全局弹窗" text="全局弹窗" description="测试能否显示全局对话框" default="0" />
 		<UserVar type="Switch" name="触控模拟" text="触控模拟" description="测试能否模拟进行触摸操作和按键操作" default="1" />
 		<UserVar type="Switch" name="屏幕捕获" text="屏幕捕获" description="测试能否截取屏幕图像" default="1" />
 		<UserVar type="Switch" name="图色识别" text="图色识别" description="搜索桌面上的Google Play图标并点击开启" default="0" />

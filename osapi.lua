@@ -1,96 +1,96 @@
 
--- ÅĞ¶Ïµ±Ç°ÊÇ·ñÒÔrootÈ¨ÏŞÔËĞĞ
+-- åˆ¤æ–­å½“å‰æ˜¯å¦ä»¥rootæƒé™è¿è¡Œ
 function runAsRoot()
 	return getDeviceInfo("UserId") == "0"
 end
 
--- »ñÈ¡ÆÁÄ»ÏÔÊ¾ĞÅÏ¢
+-- è·å–å±å¹•æ˜¾ç¤ºä¿¡æ¯
 function getDisplayInfo()
 	local res = cjson.decode(sendDeviceCmd("device.getDisplayInfo", "[]"))["result"]
 	return cjson.decode(res)
 end
 
--- »ñÈ¡Éè±¸µÄÆ·ÅÆ
+-- è·å–è®¾å¤‡çš„å“ç‰Œ
 function getBrand()
 	return cjson.decode(sendDeviceCmd("device.getBrand", "[]"))["result"]
 end
 
--- »ñÈ¡Éè±¸µÄĞÍºÅ
+-- è·å–è®¾å¤‡çš„å‹å·
 function getModel()
 	return cjson.decode(sendDeviceCmd("device.getModel", "[]"))["result"]
 end
 
--- »ñÈ¡Éè±¸µÄIMEI
+-- è·å–è®¾å¤‡çš„IMEI
 function getIMEI()
 	return cjson.decode(sendDeviceCmd("device.getIMEI", "[]"))["result"]
 end
 
--- ·µ»Øµ±Ç°Á¬½ÓµÄWifiÍøÂçÃû³Æ
+-- è¿”å›å½“å‰è¿æ¥çš„Wifiç½‘ç»œåç§°
 function getWifiSSID()
 	return string.sub(cjson.decode(sendDeviceCmd("device.getWifiSSID", "[]"))["result"], 2, -2)
 end
 
--- »ñÈ¡SD´æ´¢Â·¾¶
+-- è·å–SDå­˜å‚¨è·¯å¾„
 function getSDCardPath()
 	return cjson.decode(sendDeviceCmd("device.getSDCardPath", "[]"))["result"]
 end
 
--- ·µ»ØÉè±¸ÊÇ·ñÒÑËø¶¨
+-- è¿”å›è®¾å¤‡æ˜¯å¦å·²é”å®š
 function isDeviceLocked()
 	return cjson.decode(sendDeviceCmd("device.isDeviceLocked", "[]"))["result"]
 end
 
--- ·µ»ØÆÁÄ»ÊÇ·ñÁÁ×Å
+-- è¿”å›å±å¹•æ˜¯å¦äº®ç€
 function isScreenOn()
 	return cjson.decode(sendDeviceCmd("device.isScreenOn", "[]"))["result"]
 end
 
--- »½ĞÑÊÖ»ú
+-- å”¤é†’æ‰‹æœº
 function wakeUp()
 	sendDeviceCmd("device.wakeUp", '[]')
 end
 
--- Ê¹ÆÁÄ»±£³Ö¿ªÆô×´Ì¬£¬²ÎÊı£º±£³Ö¿ªÆôÊ±³¤£¨ºÁÃë£©
+-- ä½¿å±å¹•ä¿æŒå¼€å¯çŠ¶æ€ï¼Œå‚æ•°ï¼šä¿æŒå¼€å¯æ—¶é•¿ï¼ˆæ¯«ç§’ï¼‰
 function keepScreenOn(timeout)
 	local args = {timeout}
 	sendDeviceCmd("device.keepScreenOn", cjson.encode(args))
 end
 
--- È¡ÏûÊ¹ÆÁÄ»±£³Ö¿ªÆô×´Ì¬
+-- å–æ¶ˆä½¿å±å¹•ä¿æŒå¼€å¯çŠ¶æ€
 function cancelKeepingAwake()
 	sendDeviceCmd("device.cancelKeepingAwake", '[]')
 end
 
--- Éè±¸Õñ¶¯£¬²ÎÊı£º³ÖĞøÊ±³¤£¨ºÁÃë£©
+-- è®¾å¤‡æŒ¯åŠ¨ï¼Œå‚æ•°ï¼šæŒç»­æ—¶é•¿ï¼ˆæ¯«ç§’ï¼‰
 function vibrate(duration)
 	local args = {duration}
 	sendDeviceCmd("device.vibrate", cjson.encode(args))
 	delay(duration)
 end
 
--- Í£Ö¹Õñ¶¯
+-- åœæ­¢æŒ¯åŠ¨
 function cancelVibration()
 	sendDeviceCmd("device.cancelVibration", '[]')
 end
 
--- ÏÔÊ¾toastÌáÊ¾ĞÅÏ¢
+-- æ˜¾ç¤ºtoastæç¤ºä¿¡æ¯
 function showMessage(...)
 	local args = {string.format(...)}
 	sendDeviceCmd("system.showMessage", cjson.encode(args))
 end
 
--- Ê¹ÓÃÍ¨ÖªÀ¸ÏòÓÃ»§ÍÆËÍÏûÏ¢
+-- ä½¿ç”¨é€šçŸ¥æ å‘ç”¨æˆ·æ¨é€æ¶ˆæ¯
 function pushNotification(...)
 	local args = {string.format(...)}
 	sendDeviceCmd("system.pushNotification", cjson.encode(args))
 end
 
--- ÒÆ³ıÍÆËÍµÄÏûÏ¢
+-- ç§»é™¤æ¨é€çš„æ¶ˆæ¯
 function removeNotification()
 	sendDeviceCmd("system.removeNotification", '[]')
 end
 
--- ¼ì²éµ±Ç°Ö´ĞĞÆ÷°æ±¾ÊÇ·ñÂú×ãÔËĞĞµ±Ç°½Å±¾µÄ×îµÍÒªÇó
+-- æ£€æŸ¥å½“å‰æ‰§è¡Œå™¨ç‰ˆæœ¬æ˜¯å¦æ»¡è¶³è¿è¡Œå½“å‰è„šæœ¬çš„æœ€ä½è¦æ±‚
 function requiresAsfVersion(targetVersion)
 	local currentVersion = cjson.decode(sendDeviceCmd("system.getAsfVersion", "[]"))["result"]
 	if currentVersion == "" then
@@ -109,100 +109,105 @@ function requiresAsfVersion(targetVersion)
 	return true
 end
 
--- »ñÈ¡SDK°æ±¾
+-- è·å–SDKç‰ˆæœ¬
 function getSdkInt()
 	return cjson.decode(sendDeviceCmd("system.getSdkInt", "[]"))["result"]
 end
 
--- Éè±¸ÊÇ·ñÒÑroot
+-- è®¾å¤‡æ˜¯å¦å·²root
 function haveRoot()
 	return cjson.decode(sendDeviceCmd("system.haveRoot", "[]"))["result"]
 end
 
--- ÅĞ¶Ïµ±Ç°½çÃæÊÇ·ñÊÇ×ÀÃæ
+-- åˆ¤æ–­å½“å‰ç•Œé¢æ˜¯å¦æ˜¯æ¡Œé¢
 function isHome()
 	return cjson.decode(sendDeviceCmd("system.isHome", "[]"))["result"]
 end
 
--- ¼ì²âÆÁÄ»²¶»ñ¹¦ÄÜÊÇ·ñ¿ÉÓÃ£¬ÒªÇó°²×¿5.0ÒÔÉÏÏµÍ³
+-- æ£€æµ‹å±å¹•æ•è·åŠŸèƒ½æ˜¯å¦å¯ç”¨ï¼Œè¦æ±‚å®‰å“5.0ä»¥ä¸Šç³»ç»Ÿ
 function isCaptureAvailable()
 	return cjson.decode(sendDeviceCmd("system.isCaptureAvailable", "[]"))["result"]
 end
 
--- ¼ì²âÎŞÕÏ°­·şÎñÊÇ·ñ¿ÉÓÃ
+-- è‹¥è¯¥å‘½ä»¤æˆåŠŸå°†æ‰“å¼€å‘ç”¨æˆ·è¯·æ±‚æƒé™çš„å¯¹è¯æ¡†
+function requestCapturePermission()
+	return cjson.decode(sendDeviceCmd("system.requestCapturePermission", "[]"))["result"]
+end
+
+-- æ£€æµ‹æ— éšœç¢æœåŠ¡æ˜¯å¦å¯ç”¨
 function isAccessibilityAvailable()
 	return cjson.decode(sendDeviceCmd("system.isAccessibilityAvailable", "[]"))["result"]
 end
 
--- ´ò¿ªĞÂµÄ»î¶¯
+-- æ‰“å¼€æ–°çš„æ´»åŠ¨
 function startActivity(uri)
 	local args = {uri}
 	local res = sendDeviceCmd("system.startActivity", cjson.encode(args))
 	return cjson.decode(res)["result"]
 end
 
--- ¼ì²âÖ¸¶¨APPÊÇ·ñÒÑ°²×°
+-- æ£€æµ‹æŒ‡å®šAPPæ˜¯å¦å·²å®‰è£…
 function checkAppInstalled(pkgName)
 	local args = {pkgName}
 	local res = sendDeviceCmd("system.checkAppInstalled", cjson.encode(args))
 	return cjson.decode(res)["result"]
 end
 
--- Æô¶¯APP
+-- å¯åŠ¨APP
 function startApp(pkgName, clsName)
 	local args = {pkgName, clsName and clsName or ""}
 	local res = sendDeviceCmd("system.startApp", cjson.encode(args))
 	return cjson.decode(res)["result"]
 end
 
--- ½áÊøºóÌ¨APP
+-- ç»“æŸåå°APP
 function killBackgroundApp(pkgName)
 	local args = {pkgName}
 	sendDeviceCmd("system.killBackgroundApp", cjson.encode(args))
 end
 
--- »ñÈ¡¼ôÌù°åÖĞµÄÎÄ±¾
+-- è·å–å‰ªè´´æ¿ä¸­çš„æ–‡æœ¬
 function getClipText()
 	return cjson.decode(sendDeviceCmd("system.getClipText", "[]"))["result"]
 end
 
--- ÉèÖÃ¼ôÌù°å
+-- è®¾ç½®å‰ªè´´æ¿
 function setClipText(text)
 	local args = {text}
 	sendDeviceCmd("system.setClipText", cjson.encode(args))
 end
 
--- ¶ÁÈ¡ÎÄ¼ş
+-- è¯»å–æ–‡ä»¶
 function readFile(filePath)
 	local args = {filePath}
 	local enc_file = cjson.decode(sendDeviceCmd("system.readFile", cjson.encode(args)))["result"]
 	return misc.FromBase64(enc_file)
 end
 
--- Ğ´ÈëÎÄ¼ş£¬³É¹¦·µ»Øtrue
+-- å†™å…¥æ–‡ä»¶ï¼ŒæˆåŠŸè¿”å›true
 function writeFile(filePath, content)
 	local args = {filePath, misc.ToBase64(content)}
 	return cjson.decode(sendDeviceCmd("system.writeFile", cjson.encode(args)))["result"]
 end
 
--- Ê¹ÓÃHTTP GET»ñÈ¡Êı¾İ
+-- ä½¿ç”¨HTTP GETè·å–æ•°æ®
 function httpGet(url)
 	local args = {url}
 	return cjson.decode(sendDeviceCmd("net.httpGet", cjson.encode(args)))["result"]
 end
 
--- Ê¹ÓÃHTTP POSTÏò·şÎñÆ÷Ìá½»Êı¾İ
+-- ä½¿ç”¨HTTP POSTå‘æœåŠ¡å™¨æäº¤æ•°æ®
 function httpPost(url, content)
 	local args = {url, content}
 	return cjson.decode(sendDeviceCmd("net.httpPost", cjson.encode(args)))["result"]
 end
 
--- ¼ì²éÎŞÕÏ°­·şÎñÊÇ·ñ¿ÉÓÃ
+-- æ£€æŸ¥æ— éšœç¢æœåŠ¡æ˜¯å¦å¯ç”¨
 function checkAccessibility()
 	return cjson.decode(sendDeviceCmd("accessibility.isServiceAvailable", "[]"))["result"]
 end
 
--- ·µ»ØÆÁÄ»ÉÏËùÓĞviewĞÅÏ¢
+-- è¿”å›å±å¹•ä¸Šæ‰€æœ‰viewä¿¡æ¯
 function getViewsInfo()
 	for i = 1, 6 do
 		local res = sendDeviceCmd("accessibility.getViewsInfo", "[]")
@@ -214,12 +219,12 @@ function getViewsInfo()
 	return nil
 end
 
--- ·µ»ØÖ¸¶¨viewĞÅÏ¢
+-- è¿”å›æŒ‡å®šviewä¿¡æ¯
 function getViewInfo(handle)
 	return sendDeviceCmd("accessibility.getViewInfo", cjson.encode({handle}))
 end
 
--- µã»÷view
+-- ç‚¹å‡»view
 function clickView(handle)
 	if handle then
 		sendDeviceCmd("accessibility.clickView", cjson.encode({handle}))
@@ -228,7 +233,7 @@ function clickView(handle)
 	end
 end
 
--- ³¤µã»÷view
+-- é•¿ç‚¹å‡»view
 function longClickView(handle)
 	if handle then
 		sendDeviceCmd("accessibility.longClickView", cjson.encode({handle}))
@@ -237,44 +242,44 @@ function longClickView(handle)
 	end
 end
 
--- Ä£ÄâÊÖÊÆ
+-- æ¨¡æ‹Ÿæ‰‹åŠ¿
 function gesture(path, duration)
 	local points = cjson.encode(path)
 	local args = {20, duration, points}
 	sendDeviceCmd("accessibility.gesture", cjson.encode(args))
 end
 
--- Ä£Äâ×ø±êµã»÷
+-- æ¨¡æ‹Ÿåæ ‡ç‚¹å‡»
 function tap(x, y)
 	gesture({{x, y}}, 20)
 end
 
--- Ä£Äâ»®¶¯
+-- æ¨¡æ‹Ÿåˆ’åŠ¨
 function swipe(x1, y1, x2, y2, duration)
 	gesture({{x1, y1}, {x2, y2}}, duration)
 end
 
--- Ä£Äâ·µ»Ø²Ù×÷
+-- æ¨¡æ‹Ÿè¿”å›æ“ä½œ
 function back()
 	sendDeviceCmd("accessibility.back", "[]")
 end
 
--- Ä£Äâ»Ø×ÀÃæ
+-- æ¨¡æ‹Ÿå›æ¡Œé¢
 function home()
 	sendDeviceCmd("accessibility.home", "[]")
 end
 
--- Ä£ÄâÏÂ»®²Ù×÷
+-- æ¨¡æ‹Ÿä¸‹åˆ’æ“ä½œ
 function scrollBackward()
 	sendDeviceCmd("accessibility.scrollBackward", "[]")
 end
 
--- Ä£ÄâÉÏ»®²Ù×÷
+-- æ¨¡æ‹Ÿä¸Šåˆ’æ“ä½œ
 function scrollForward()
 	sendDeviceCmd("accessibility.scrollForward", "[]")
 end
 
--- Íù²éÕÒµ½µÄ±à¼­¿òÀïÊäÈëÎÄ±¾
+-- å¾€æŸ¥æ‰¾åˆ°çš„ç¼–è¾‘æ¡†é‡Œè¾“å…¥æ–‡æœ¬
 function inputText(text)
 	local args = {text}
 	sendDeviceCmd("accessibility.inputText", cjson.encode(args))

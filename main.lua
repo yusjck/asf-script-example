@@ -117,34 +117,16 @@ function test_outputLog()
 end
 
 function main()
-	if not requiresAsfVersion("1.4.6") then
-		msgBox("脚本无法在当前asf平台上运行，请更新asf平台后再试")
-		endScript()
+	if not requiresAsfVersion("1.5.3") then
+		msgBox("asf版本过低，请更新后再试")
+		endScript("failure")
 	end
 
-	Display:init()
-	View:init()
-	Touch:init()
-
-	-- msgBox("%s", getSDCardPath())
-	-- writeFile(getSDCardPath().."/ss/1.txt", "aaa123456")
-	-- msgBox("%s", readFile(getSDCardPath().."/ss/1.txt"))
-	-- if not file.open(getScriptDir().."/libcallhlp.so", "rb") then
-		-- msgBox("open fail")
-		-- endScript()
-	-- end
-	-- local s1 = file.read()
-	-- writeFile(getSDCardPath().."/data.bin", s1)
-	-- local s2 = readFile(getSDCardPath().."/data.bin")
-	-- if s1 ~= s2 then msgBox("err") end
-	-- msgBox(1)
-	-- msgBox(plugin.example.TestCommand1("Hello", 123))
-	-- msgBox(plugin.memory.GetProcessIdByName("com.android.musicfx"))
-	-- Display:snapshot(getScriptDir().."/test.png")
-	-- msgBox(getViewsInfo())
-	-- setClipText("afa")
-	-- msgBox("%s", getClipText())
-	-- startActivity("taobao://m.tb.cn/h.en8o2i9?sm=069084 ")
+	local delayRun = tonumber(getUserVar("delay_run", "0"))
+	if delayRun > 0 then
+		logPrint("执行%d秒延迟", delayRun)
+		delay(delayRun * 1000)
+	end
 
 	local touchMode = getUserVar("touch_mode")
 	if touchMode == "2" then
@@ -155,14 +137,17 @@ function main()
 		Touch:setMode(2)
 	end
 
-	local delayRun = tonumber(getUserVar("delay_run", "0"))
-	if delayRun > 0 then
-		logPrint("执行%d秒延迟", delayRun)
-		delay(delayRun * 1000)
-	end
+	-- 初始化基于无障碍辅助的视图解析和手势模拟
+	View:init()
+	Touch:init()
 
+	-- 解除设备息屏和锁定状态
 	Device:init()
 	Device:wakeAndUnlock()
+
+	-- 尝试获取屏幕捕获权限并确认截屏功能可用
+	Device:turnOnCapture()
+	Display:init()
 
 	local tasks = {
 		{name="全局弹窗", func=test_popupBox},

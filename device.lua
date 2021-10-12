@@ -151,3 +151,30 @@ function Device:wakeAndUnlock()
 	cancelTimer("wake_device_timeout")
 end
 
+function Device:turnOnCapture()
+	-- 如果屏幕捕获功能未开启，尝试通过无障碍辅助功能自动开启
+	if not isCaptureAvailable() then
+		-- 尝试打开申请权限的系统对话框
+		requestCapturePermission()
+		delay(300)
+		-- 搜索对话框的确认按钮
+		local btn = view{id="android:id/button1"}:findOne(1500)
+		if btn then
+			-- 点击开启屏幕捕获功能并等待截屏测试通过
+			btn:click()
+			delay(500)
+		end
+	end
+	for i = 1, 3 do
+		local bmp = color.CaptureBitmap(0, 0, 20, 20)
+		if bmp then
+			color.ReleaseBitmap(bmp)
+			return
+		end
+		delay(500)
+	end
+	ePrint("无法截屏")
+	showMessage("截屏测试未通过")
+	endScript("failure")
+end
+
