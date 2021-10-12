@@ -10,5 +10,5 @@
 
 ## 注意
 
-- 为确保脚本能正常运行，启动脚本前需手动为asf软件开启无障碍辅助功能和屏幕录像功能，如下图：<br>
+- 脚本需要无障碍辅助权限才能正常运行，该权限需在首次运行asf时手动开启，如下图：<br>
 ![image](https://github.com/yusjck/asf-script-example/blob/main/images/step1.png)
